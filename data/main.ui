@@ -230,7 +230,7 @@
                                     <property name="label"></property>
                                     <property name="wrap">True</property>
                                     <property name="halign">start</property>
-                                    <property name="max-width-chars">35</property>
+                                    <property name="max-width-chars">45</property>
                                   </object>
                                 </child>
                               </object>
