@@ -531,8 +531,8 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="notebook-tab-storage">
-                <property name="label">Storage</property>
+              <object class="GtkLabel" id="notebook-tab-inventory">
+                <property name="label">Inventory</property>
               </object>
             </child>
           </object>
