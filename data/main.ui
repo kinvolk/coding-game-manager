@@ -32,12 +32,12 @@
                     <property name="orientation">vertical</property>
                     <property name="margin">20</property>
                     <child>
-                      <object class="GtkDrawingArea" id="player_avatar">
+                      <object class="GtkDrawingArea" id="player-avatar">
                         <property name="visible">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="player_name">
+                      <object class="GtkLabel" id="player-name">
                         <property name="visible">True</property>
                         <property name="label">Player's Name</property>
                       </object>
@@ -61,7 +61,7 @@
                             <class name="rounded-bubble"/>
                         </style>
                         <child>
-                          <object class="GtkDrawingArea" id="stage_avatar">
+                          <object class="GtkDrawingArea" id="stage-avatar">
                             <property name="visible">True</property>
                             <property name="height-request">60</property>
                           </object>
@@ -94,7 +94,7 @@
                                   <class name="header-medium"/>
                                 </style>
                                 <child>
-                                  <object class="GtkLabel" id="current_stage_number">
+                                  <object class="GtkLabel" id="current-stage-number">
                                     <property name="visible">True</property>
                                     <property name="label">4</property>
                                   </object>
@@ -114,7 +114,7 @@
                             <class name="rounded-bubble"/>
                         </style>
                         <child>
-                          <object class="GtkDrawingArea" id="points_avatar">
+                          <object class="GtkDrawingArea" id="points-avatar">
                             <property name="visible">True</property>
                             <property name="height-request">60</property>
                           </object>
@@ -141,7 +141,7 @@
                                   <class name="header-medium"/>
                                 </style>
                                 <child>
-                                  <object class="GtkLabel" id="current_points">
+                                  <object class="GtkLabel" id="current-points">
                                     <property name="visible">True</property>
                                     <property name="label">541</property>
                                   </object>
@@ -209,7 +209,7 @@
                                     <property name="visible">True</property>
                                     <property name="hexpand">True</property>
                                     <child>
-                                      <object class="GtkLabel" id="current_task_label">
+                                      <object class="GtkLabel" id="current-task-label">
                                         <property name="visible">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="label">Current Task Name</property>
@@ -221,11 +221,11 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="current_task_reward">
+                                  <object class="GtkBox" id="current-task-reward">
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="current_task_desc">
+                                  <object class="GtkLabel" id="current-task-desc">
                                     <property name="visible">True</property>
                                     <property name="label">Current Task Desc a really long description with many words about a world that you might want to one day inhabit</property>
                                     <property name="wrap">True</property>
@@ -277,7 +277,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="current_task_hint">
+                                      <object class="GtkLabel" id="current-task-hint">
                                         <property name="visible">True</property>
                                         <property name="label">Current Task Hint</property>
                                         <property name="wrap">True</property>
@@ -336,7 +336,7 @@
                                               <class name="header-medium"/>
                                             </style>
                                             <child>
-                                              <object class="GtkLabel" id="current_task_parts_completed">
+                                              <object class="GtkLabel" id="current-task-parts-completed">
                                                 <property name="visible">True</property>
                                                 <property name="label">4</property>
                                               </object>
@@ -356,7 +356,7 @@
                                               <class name="header-medium"/>
                                             </style>
                                             <child>
-                                              <object class="GtkLabel" id="current_task_parts_total">
+                                              <object class="GtkLabel" id="current-task-parts-total">
                                                 <property name="visible">True</property>
                                                 <property name="label">10</property>
                                               </object>
@@ -372,7 +372,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkProgressBar">
+                                      <object class="GtkProgressBar" id="current-task-progress">
                                         <property name="visible">True</property>
                                         <property name="fraction">0.3</property>
                                         <property name="margin-top">4</property>
