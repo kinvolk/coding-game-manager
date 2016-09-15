@@ -396,13 +396,138 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <style>
-                  <class name="game-content"/>
-                  <class name="notebook-content"/>
-                </style>
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="label">Placeholder for 'Storage' section</property>
+                <property name="orientation">vertical</property>
+                <property name="margin">30</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label">Sort by: stage, kind</property>
+                    <property name="halign">start</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="spacing">10</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                        <style>
+                          <class name="rounded-bubble"/>
+                          <class name="separated-bubble-internal-medium"/>
+                        </style>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="hexpand">True</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="artifact_icon_drawing_area">
+                                <property name="visible">True</property>
+                                <property name="height-request">48</property>
+                                <property name="width-request">48</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="spacing">10</property>
+                                    <property name="orientation">vertical</property>
+                                    <style>
+                                      <class name="inventory-link"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="label">Chopin_Ballad.mp3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <!-- A box to hold the stage and points indicator for each artifact -->
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="spacing">5</property>
+                                        <child>
+                                          <object class="GtkBox">
+                                            <property name="visible">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="spacing">3</property>
+                                            <style>
+                                              <class name="rounded-bubble"/>
+                                              <class name="bubble-inner"/>
+                                              <class name="separated-bubble-internal-small"/>
+                                              <class name="header-small"/>
+                                            </style>
+                                            <child>
+                                              <object class="GtkDrawingArea">
+                                                <property name="visible">True</property>
+                                                <property name="halign">start</property>
+                                                <property name="width-request">24</property>
+                                                <property name="height-request">24</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="artifact_stage_number_label">
+                                                <property name="visible">True</property>
+                                                <property name="label">1</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox">
+                                            <property name="visible">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="spacing">3</property>
+                                            <style>
+                                              <class name="rounded-bubble"/>
+                                              <class name="bubble-inner"/>
+                                              <class name="separated-bubble-internal-small"/>
+                                              <class name="header-small"/>
+                                            </style>
+                                            <child>
+                                              <object class="GtkDrawingArea">
+                                                <property name="visible">True</property>
+                                                <property name="halign">start</property>
+                                                <property name="width-request">24</property>
+                                                <property name="height-request">24</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="artifact_points_label">
+                                                <property name="visible">True</property>
+                                                <property name="label">452</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child type="tab">

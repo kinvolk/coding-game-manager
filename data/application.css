@@ -17,10 +17,18 @@ notebook > header > tabs > tab:checked {
 .rounded-bubble label {
   color: #b0b1b3;
 }
+.bubble-inner {
+  background-color: #7d7e82;
+  border-radius: 0.4em;
+}
 .section-header label {
   color: #59595b;
   font-weight: bolder;
   font-size: 9pt;
+}
+.inventory-link label {
+  color: #85b0ca;
+  font-weight: bold;
 }
 .header-large label {
   font-size: 18pt;
@@ -61,4 +69,10 @@ progressbar trough progress {
 }
 .separated-bubble-internal-medium {
   padding: 15px;
+}
+.separated-bubble-internal-small {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
