@@ -9,6 +9,10 @@
 }
 
 .manager-container {
-    padding: 40px;
+    padding: 10px;
     background-color: #717274;
+}
+
+.game-notebook.header.top.tabs {
+    background-color: #818286
 }
