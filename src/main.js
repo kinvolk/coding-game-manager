@@ -44,12 +44,12 @@ function initials_from_name(name) {
 
 const CONTACT_IMAGE_FONT_DESC = Pango.FontDescription.from_string('Sans Bold 27');
 
-const MISSION_CHATBOX_NAME = 'com.endlessm.Mission.Chatbox';
-const MISSION_CHATBOX_PATH = '/com/endlessm/Mission/Chatbox';
-const MISSION_CHATBOX_IFACE = 'com.endlessm.Mission.Chatbox';
+const MISSION_MANAGER_NAME = 'com.endlessm.Mission.Manager';
+const MISSION_MANAGER_PATH = '/com/endlessm/Mission/Manager';
+const MISSION_MANAGER_IFACE = 'com.endlessm.Mission.Manager';
 const SIDE_COMPONENT_ROLE = 'eos-side-component';
 
-const MissionChatboxIface = '<node><interface name="' + MISSION_CHATBOX_NAME + '">' +
+const MissionManagerIface = '<node><interface name="' + MISSION_MANAGER_NAME + '">' +
   '<method name="show">' +
     '<arg type="u" direction="in" name="timestamp"/>' +
   '</method>' +
@@ -68,7 +68,7 @@ const MissionChatboxIface = '<node><interface name="' + MISSION_CHATBOX_NAME + '
  * image.
  */
 function load_image_from_resource_async(filename, callback) {
-    let file = Gio.file_new_for_uri('resource:///com/endlessm/Mission/Chatbox/img/' + filename);
+    let file = Gio.file_new_for_uri('resource:///com/endlessm/Mission/Manager/img/' + filename);
     file.load_contents_async(null, function(file, result) {
         let contents;
         try {
@@ -96,7 +96,7 @@ function load_image_from_resource_async(filename, callback) {
 const MissionChatboxContactListItem = new Lang.Class({
     Name: 'MissionChatboxContactListItem',
     Extends: Gtk.ListBoxRow,
-    Template: 'resource:///com/endlessm/Mission/Chatbox/contact.ui',
+    Template: 'resource:///com/endlessm/Mission/Manager/contact.ui',
     Children: ['contact-image-circle', 'contact-name-label', 'contact-message-snippit-label'],
     Properties: {
         'contact-name': GObject.ParamSpec.string('contact-name',
@@ -173,7 +173,7 @@ const MissionChatboxContactListItem = new Lang.Class({
 const MissionChatboxChatBubbleContainer = new Lang.Class({
     Name: 'MissionChatboxChatBubbleContainer',
     Extends: Gtk.Box,
-    Template: 'resource:///com/endlessm/Mission/Chatbox/chat-bubble-container.ui',
+    Template: 'resource:///com/endlessm/Mission/Manager/chat-bubble-container.ui',
     Children: ['inner-box', 'bubble-box'],
     Properties: {
         'content': GObject.ParamSpec.object('content',
@@ -369,10 +369,10 @@ const MessageClasses = {
 };
 
 
-const MissionChatboxMainWindow = new Lang.Class({
-    Name: 'MissionChatboxMainWindow',
+const MissionManagerMainWindow = new Lang.Class({
+    Name: 'MissionManagerMainWindow',
     Extends: Gtk.ApplicationWindow,
-    Template: 'resource:///com/endlessm/Mission/Chatbox/main.ui',
+    Template: 'resource:///com/endlessm/Mission/Manager/main.ui',
     Children: ['chatbox-list-box', 'chatbox-stack'],
     Properties: {
         service: GObject.ParamSpec.object('service',
@@ -384,7 +384,7 @@ const MissionChatboxMainWindow = new Lang.Class({
     },
 
     _init: function(params) {
-        let actorsFile = Gio.File.new_for_uri('resource:///com/endlessm/Mission/Chatbox/chatbox-data.json');
+        let actorsFile = Gio.File.new_for_uri('resource:///com/endlessm/Mission/Manager/chatbox-data.json');
 
         params.title = "";
         this.parent(params);
@@ -486,31 +486,31 @@ function load_style_sheet(name) {
                                              Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
-const MissionChatboxApplication = new Lang.Class({
-    Name: 'MissionChatboxApplication',
+const MissionManagerApplication = new Lang.Class({
+    Name: 'MissionManagerApplication',
     Extends: Gtk.Application,
 
     _init: function() {
         this.parent({ application_id: pkg.name });
-        GLib.set_application_name(_("Mission Chatbox"));
+        GLib.set_application_name(_("Mission Manager"));
         this.Visible = false;
     },
 
     vfunc_startup: function() {
         this.parent();
 
-        load_style_sheet('/com/endlessm/Mission/Chatbox/application.css');
+        load_style_sheet('/com/endlessm/Mission/Manager/application.css');
 
         this._service = new Service.MissionChatboxTextService();
-        this._window = new MissionChatboxMainWindow({
+        this._window = new MissionManagerMainWindow({
             application: this,
             service: this._service,
             type_hint: Gdk.WindowTypeHint.DOCK,
             role: SIDE_COMPONENT_ROLE
         });
 
-        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(MissionChatboxIface, this);
-        this._dbusImpl.export(Gio.DBus.session, MISSION_CHATBOX_PATH);
+        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(MissionManagerIface, this);
+        this._dbusImpl.export(Gio.DBus.session, MISSION_MANAGER_PATH);
 
         this._update_geometry();
 
@@ -549,14 +549,14 @@ const MissionChatboxApplication = new Lang.Class({
     _on_visibility_changed: function() {
         this.Visible = this._window.is_visible();
         let propChangedVariant = new GLib.Variant('(sa{sv}as)', [
-            MISSION_CHATBOX_IFACE, {
+            MISSION_MANAGER_IFACE, {
                 'Visible': new GLib.Variant('b', this.Visible)
             },
             []
         ]);
 
         Gio.DBus.session.emit_signal(null,
-                                     MISSION_CHATBOX_PATH,
+                                     MISSION_MANAGER_PATH,
                                      'org.freedesktop.DBus.Properties',
                                      'PropertiesChanged',
                                      propChangedVariant);
@@ -591,5 +591,5 @@ const MissionChatboxApplication = new Lang.Class({
 });
 
 function main(argv) { // eslint-disable-line no-unused-vars
-    return (new MissionChatboxApplication()).run(argv);
+    return (new MissionManagerApplication()).run(argv);
 }
