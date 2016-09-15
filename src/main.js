@@ -19,6 +19,7 @@ pkg.require({
 const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Wnck = imports.gi.Wnck;
 
@@ -39,15 +40,154 @@ const CodingManagerIface = '<node><interface name="' + CODING_MANAGER_NAME + '">
   '<property name="Visible" type="b" access="read"/>' +
 '</interface></node>';
 
+const CodingInventoryItemBubble = new Lang.Class({
+    Name: 'CodingInventoryItemBubble',
+    Extends: Gtk.Box,
+    Template: 'resource:///com/endlessm/Coding/Manager/inventory-bubble.ui',
+    Children: ['artifact-icon-drawing-area', 'artifact-name', 'artifact-stage-number-label', 'artifact-points-label'],
+    Properties: {
+        icon: GObject.ParamSpec.string('icon',
+                                       '',
+                                       '',
+                                       GObject.ParamFlags.READWRITE |
+                                       GObject.ParamFlags.CONSTRUCT_ONLY,
+                                       ''),
+        name: GObject.ParamSpec.string('name',
+                                       '',
+                                       '',
+                                       GObject.ParamFlags.READWRITE |
+                                       GObject.ParamFlags.CONSTRUCT_ONLY,
+                                       ''),
+        stage: GObject.ParamSpec.string('stage',
+                                        '',
+                                        '',
+                                        GObject.ParamFlags.READWRITE |
+                                        GObject.ParamFlags.CONSTRUCT_ONLY,
+                                        ''),
+        points: GObject.ParamSpec.string('points',
+                                         '',
+                                         '',
+                                         GObject.ParamFlags.READWRITE |
+                                         GObject.ParamFlags.CONSTRUCT_ONLY,
+                                         '')
+    },
+
+    _init: function(params) {
+        this.parent(params);
+        this.name_binding = new GObject.Binding({
+            flags: GObject.BindingFlags.DEFAULT,
+            source: this,
+            source_property: 'name',
+            target: this.artifact_name,
+            target_property: 'label'
+        });
+        this.artifact_name.label = this.name;
+        this.stage_binding = new GObject.Binding({
+            flags: GObject.BindingFlags.DEFAULT,
+            source: this,
+            source_property: 'stage',
+            target: this.artifact_stage_number_label,
+            target_property: 'label'
+        });
+        this.artifact_stage_number_label.label = this.stage;
+        this.points_binding = new GObject.Binding({
+            flags: GObject.BindingFlags.DEFAULT,
+            source: this,
+            source_property: 'points',
+            target: this.artifact_points_label,
+            target_property: 'label'
+        });
+        this.artifact_points_label.label = this.points;
+    }
+});
+
+const MOCK_BUBBLES = [
+    {
+        icon: 'music.png',
+        name: 'Chopin_Ballad.mp3',
+        stage: '1',
+        points: '55'
+    },
+    {
+        icon: 'camera.png',
+        name: 'Poland_tree.jpg',
+        stage: '1',
+        points: '55'
+    },
+    {
+        icon: 'video.png',
+        name: 'Orchestra.mp4',
+        stage: '1',
+        points: '55'
+    },
+    {
+        icon: 'document',
+        name: 'Charade.doc',
+        stage: '1',
+        points: '55'
+    },
+    {
+        icon: 'key.png',
+        name: 'Key',
+        stage: '1',
+        points: '55'
+    },
+    {
+        icon: 'video.png',
+        name: 'Orchestra.mp4',
+        stage: '1',
+        points: '55'
+    },
+    {
+        icon: 'document',
+        name: 'Charade.doc',
+        stage: '1',
+        points: '55'
+    },
+    {
+        icon: 'key.png',
+        name: 'Key',
+        stage: '1',
+        points: '55'
+    }
+];
+
 const CodingManagerMainWindow = new Lang.Class({
     Name: 'CodingManagerMainWindow',
     Extends: Gtk.ApplicationWindow,
     Template: 'resource:///com/endlessm/Coding/Manager/main.ui',
+    Children: [
+        'inventory-bubbles',
+        'player-name',
+        'player-avatar',
+        'stage-avatar',
+        'current-stage-number',
+        'points-avatar',
+        'current-points',
+        'current-task-label',
+        'current-task-reward',
+        'current-task-desc',
+        'current-task-hint',
+        'current-task-parts-completed',
+        'current-task-parts-total',
+        'current-task-progress',
+    ],
 
     _init: function(params) {
-        params.title = '';
         this.parent(params);
-    }
+        MOCK_BUBBLES.forEach(Lang.bind(this, function(bubble_spec) {
+            this.inventory_bubbles.pack_end(new CodingInventoryItemBubble(bubble_spec), false, false, 0);
+        }));
+        this.player_name.label = GLib.get_real_name();
+        this.current_stage_number.label = '1';
+        this.current_points.label = '541';
+        this.current_task_label.label = 'Force Field';
+        this.current_task_desc.label = "Your key is there for you, but watch out: you'll never reach it. Break the force field with some code in order to reach this key. Your key is there for you, but watch out: you'll never reach it!";
+        this.current_task_hint.label = "Makes you think about the academy all the time";
+        this.current_task_parts_completed.label = "4";
+        this.current_task_parts_total.label = "15";
+        this.current_task_progress.fraction = 4 / 15;
+    },
 });
 
 function load_style_sheet(resourcePath) {
