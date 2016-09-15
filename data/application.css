@@ -10,4 +10,55 @@ notebook > header > tabs > tab:checked {
   color: #ffffff;
   box-shadow: inset 0 -3px #ffffff;
 }
+.rounded-bubble {
+  background-color: #8a8b8f;
+  border-radius: 0.4em;
+}
+.rounded-bubble label {
+  color: #b0b1b3;
+}
+.section-header label {
+  color: #59595b;
+  font-weight: bolder;
+  font-size: 9pt;
+}
+.header-large label {
+  font-size: 18pt;
+  font-weight: bolder;
+  color: #feffff;
+}
+.header-medium label {
+  font-size: 14pt;
+  font-weight: bolder;
+  color: #feffff;
+}
+.header-small label {
+  color: #feffff;
+}
 
+progressbar {
+  border-color: #7f8084;
+  border-radius: 0.4em;
+}
+
+progressbar trough {
+  border-color: #7f8084;
+  min-height: 10px;
+  background-color: #737478;
+  border-radius: 0.4em;
+}
+progressbar trough progress {
+  border-width: 0;
+  min-height: 10px;
+  background-color: #CCCCCC;
+  border-top-left-radius: 0.4em;
+  border-bottom-left-radius: 0.4em;
+  border-top-right-radius: 0em;
+  border-bottom-right-radius: 0em;
+}
+.separated-bubble-internal {
+  padding: 20px;
+}
+.separated-bubble-internal-medium {
+  padding: 15px;
+}
