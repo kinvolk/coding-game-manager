@@ -82,7 +82,7 @@
                               <class name="separated-bubble-internal-medium"/>
                             </style>
                             <child>
-                              <object class="GtkLabel" id="stage_label">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="label">Stage</property>
                               </object>
@@ -149,7 +149,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="points_label">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="label">Points</property>
                                 <property name="hexpand">True</property>
