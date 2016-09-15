@@ -3,7 +3,5 @@
   <gresource prefix="/com/endlessm/Mission/Manager/js">
     <file>main.js</file>
     <file>service.js</file>
-    <file>views.js</file>
-    <file>state.js</file>
   </gresource>
 </gresources>
