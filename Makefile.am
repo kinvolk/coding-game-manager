@@ -2,6 +2,10 @@
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/src --generate-dependencies $(srcdir)/src/com.endlessm.Coding.Manager.src.gresource.xml)
 app_resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/data --generate-dependencies $(srcdir)/data/com.endlessm.Coding.Manager.data.gresource.xml)
 
+resourcedir = $(pkgdatadir)
+resource_DATA = data/com.endlessm.Coding.Manager.data.gresource \
+		src/com.endlessm.Coding.Manager.src.gresource \
+		$(NULL)
 
 # Set EXTRA_DIST and CLEANFILES initially
 EXTRA_DIST = \
@@ -13,19 +17,15 @@ EXTRA_DIST = \
 	$(NULL)
 
 
-data/com.endlessm.Coding.Manager.data.gresource: data/com.endlessm.Coding.Manager.data.gresource.xml $(app_resource_files)
+data/com.endlessm.Coding.Manager.data.gresource: $(srcdir)/data/com.endlessm.Coding.Manager.data.gresource.xml $(app_resource_files)
+	$(AM_V_GEN) mkdir -p data
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir)/data $<
 
-src/com.endlessm.Coding.Manager.src.gresource: src/com.endlessm.Coding.Manager.src.gresource.xml $(resource_files)
+src/com.endlessm.Coding.Manager.src.gresource: $(srcdir)/src/com.endlessm.Coding.Manager.src.gresource.xml $(resource_files)
+	$(AM_V_GEN) mkdir -p src
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir)/src $<
 
-
-Manager_resources = data/com.endlessm.Coding.Manager.data.gresource \
-		    src/com.endlessm.Coding.Manager.src.gresource \
-		    $(NULL)
-
-
-src/com.endlessm.Coding.Manager: src/com.endlessm.Coding.Manager.in $(Manager_resources)
+src/com.endlessm.Coding.Manager: $(srcdir)/src/com.endlessm.Coding.Manager.in $(manager_resources)
 	$(AM_V_GEN) sed \
 		-e "s|[@]GJS@|$(GJS)|g" \
 		-e "s|[@]PACKAGE_VERSION@|$(PACKAGE_VERSION)|g" \
@@ -40,7 +40,8 @@ src/com.endlessm.Coding.Manager: src/com.endlessm.Coding.Manager.in $(Manager_re
 bin_SCRIPTS = src/com.endlessm.Coding.Manager
 
 # Distclean
-CLEANFILES = src/com.endlessm.Coding.Manager \
-	$(Manager_resources) \
+CLEANFILES = \
+	$(resource_DATA) \
+	src/com.endlessm.Coding.Manager \
 	$(NULL)
 
