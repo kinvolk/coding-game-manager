@@ -39,7 +39,7 @@
                     <child>
                       <object class="GtkLabel" id="player-name">
                         <property name="visible">True</property>
-                        <property name="label">Player's Name</property>
+                        <property name="label"></property>
                       </object>
                     </child>
                   </object>
@@ -96,7 +96,7 @@
                                 <child>
                                   <object class="GtkLabel" id="current-stage-number">
                                     <property name="visible">True</property>
-                                    <property name="label">4</property>
+                                    <property name="label"></property>
                                   </object>
                                 </child>
                               </object>
@@ -143,7 +143,7 @@
                                 <child>
                                   <object class="GtkLabel" id="current-points">
                                     <property name="visible">True</property>
-                                    <property name="label">541</property>
+                                    <property name="label"></property>
                                   </object>
                                 </child>
                               </object>
@@ -212,7 +212,7 @@
                                       <object class="GtkLabel" id="current-task-label">
                                         <property name="visible">True</property>
                                         <property name="hexpand">True</property>
-                                        <property name="label">Current Task Name</property>
+                                        <property name="label"></property>
                                       </object>
                                     </child>
                                     <style>
@@ -227,7 +227,7 @@
                                 <child>
                                   <object class="GtkLabel" id="current-task-desc">
                                     <property name="visible">True</property>
-                                    <property name="label">Current Task Desc a really long description with many words about a world that you might want to one day inhabit</property>
+                                    <property name="label"></property>
                                     <property name="wrap">True</property>
                                     <property name="halign">start</property>
                                     <property name="max-width-chars">35</property>
@@ -279,7 +279,7 @@
                                     <child>
                                       <object class="GtkLabel" id="current-task-hint">
                                         <property name="visible">True</property>
-                                        <property name="label">Current Task Hint</property>
+                                        <property name="label"></property>
                                         <property name="wrap">True</property>
                                         <property name="halign">start</property>
                                         <property name="max-width-chars">20</property>
@@ -338,7 +338,7 @@
                                             <child>
                                               <object class="GtkLabel" id="current-task-parts-completed">
                                                 <property name="visible">True</property>
-                                                <property name="label">4</property>
+                                                <property name="label"></property>
                                               </object>
                                             </child>
                                           </object>
@@ -358,7 +358,7 @@
                                             <child>
                                               <object class="GtkLabel" id="current-task-parts-total">
                                                 <property name="visible">True</property>
-                                                <property name="label">10</property>
+                                                <property name="label"></property>
                                               </object>
                                             </child>
                                           </object>
@@ -374,7 +374,7 @@
                                     <child>
                                       <object class="GtkProgressBar" id="current-task-progress">
                                         <property name="visible">True</property>
-                                        <property name="fraction">0.3</property>
+                                        <property name="fraction">0.0</property>
                                         <property name="margin-top">4</property>
                                       </object>
                                     </child>
