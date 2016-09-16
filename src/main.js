@@ -74,29 +74,10 @@ const CodingInventoryItemBubble = new Lang.Class({
 
     _init: function(params) {
         this.parent(params);
-        this.name_binding = new GObject.Binding({
-            flags: GObject.BindingFlags.DEFAULT,
-            source: this,
-            source_property: 'name',
-            target: this.artifact_name,
-            target_property: 'label'
-        });
-        this.artifact_name.label = this.name;
-        this.stage_binding = new GObject.Binding({
-            flags: GObject.BindingFlags.DEFAULT,
-            source: this,
-            source_property: 'stage',
-            target: this.artifact_stage_number_label,
-            target_property: 'label'
-        });
-        this.artifact_stage_number_label.label = this.stage;
-        this.points_binding = new GObject.Binding({
-            flags: GObject.BindingFlags.DEFAULT,
-            source: this,
-            source_property: 'points',
-            target: this.artifact_points_label,
-            target_property: 'label'
-        });
+        this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.DEFAULT)
+        this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.DEFAULT)
+        this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.DEFAULT)
+        this.artifact_name.label = this.name;rtifact_stage_number_label.label = this.stage;
         this.artifact_points_label.label = this.points;
     }
 });
