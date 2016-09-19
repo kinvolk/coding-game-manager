@@ -16,6 +16,7 @@ pkg.require({
     GLib: '2.0',
 });
 
+const CodingGameDBUSService = imports.gi.CodingGameService
 const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -77,7 +78,7 @@ const CodingInventoryItemBubble = new Lang.Class({
         this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.DEFAULT)
         this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.DEFAULT)
         this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.DEFAULT)
-        this.artifact_name.label = this.name;rtifact_stage_number_label.label = this.stage;
+        this.artifact_name.label = this.artifact_stage_number_label.label = this.stage;
         this.artifact_points_label.label = this.points;
     }
 });
@@ -136,6 +137,14 @@ const MOCK_BUBBLES = [
 const CodingManagerMainWindow = new Lang.Class({
     Name: 'CodingManagerMainWindow',
     Extends: Gtk.ApplicationWindow,
+    Properties: {
+        service: GObject.ParamSpec.object('service',
+                                          'A CodingGameDBUSService.CodingGameServiceProxy',
+                                          'A CodingGameDBUSService.CodingGameServiceProxy to retrieve state information from',
+                                          GObject.ParamFlags.READWRITE |
+                                          GObject.ParamFlags.CONSTRUCT_ONLY,
+                                          CodingGameDBUSService.CodingGameServiceProxy)
+    },
     Template: 'resource:///com/endlessm/Coding/Manager/main.ui',
     Children: [
         'inventory-bubbles',
@@ -161,13 +170,39 @@ const CodingManagerMainWindow = new Lang.Class({
         }));
         this.player_name.label = GLib.get_real_name();
         this.current_stage_number.label = '1';
-        this.current_points.label = '541';
-        this.current_task_label.label = 'Force Field';
-        this.current_task_desc.label = "Your key is there for you, but watch out: you'll never reach it. Break the force field with some code in order to reach this key. Your key is there for you, but watch out: you'll never reach it!";
         this.current_task_hint.label = "Makes you think about the academy all the time";
-        this.current_task_parts_completed.label = "4";
-        this.current_task_parts_total.label = "15";
-        this.current_task_progress.fraction = 4 / 15;
+        this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
+        this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
+        this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
+                                               this.service.current_mission_num_tasks_available);
+
+        /* Bind properties so that they automatically update when the game service
+         * state changes */
+        this.service.bind_property('current-mission-name',
+                                   this.current_task_label,
+                                   'label',
+                                   GObject.BindingFlags.SYNC_CREATE);
+        this.service.bind_property('current-mission-desc',
+                                   this.current_task_desc,
+                                   'label',
+                                   GObject.BindingFlags.SYNC_CREATE);
+        this.service.bind_property('current-mission-points',
+                                   this.current_points,
+                                   'label',
+                                   GObject.BindingFlags.SYNC_CREATE);
+
+        /* We don't use GBinding for the below since we have to bind two properties
+         * to each (the progress bar and the label) */
+        this.service.connect('notify::current-mission-num-tasks', Lang.bind(this, function() {
+            this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
+                                                   this.service.current_mission_num_tasks_available);
+            this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
+        }));
+        this.service.connect('notify::current-mission-num-tasks-available', Lang.bind(this, function() {
+            this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
+                                                   this.service.current_mission_num_tasks_available);
+            this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
+        }));
     },
 });
 
@@ -195,10 +230,19 @@ const CodingManagerApplication = new Lang.Class({
         Gtk.Settings.get_default().gtk_application_prefer_dark_theme = true;
         load_style_sheet('/com/endlessm/Coding/Manager/application.css');
 
+        let name = 'com.endlessm.CodingGameService.Service';
+        let path = '/com/endlessm/CodingGameService/Service';
+        this._service = CodingGameDBUSService.CodingGameServiceProxy
+                                             .new_for_bus_sync(Gio.BusType.SESSION,
+                                                               0,
+                                                               name,
+                                                               path,
+                                                               null);
         this._window = new CodingManagerMainWindow({
             application: this,
             type_hint: Gdk.WindowTypeHint.DOCK,
-            role: SIDE_COMPONENT_ROLE
+            role: SIDE_COMPONENT_ROLE,
+            service: this._service
         });
 
         this._update_geometry();
