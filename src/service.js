@@ -36,7 +36,7 @@ const MissionChatboxTextService = new Lang.Class({
             try {
                 this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
             } catch (e) {
-                logError(e, "Error occurred in creating ShowmehowServiceProxy");
+                logError(e, 'Error occurred in creating ShowmehowServiceProxy');
                 return;
             }
 

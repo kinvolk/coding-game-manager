@@ -49,7 +49,7 @@ const MissionManagerMainWindow = new Lang.Class({
     Template: 'resource:///com/endlessm/Mission/Manager/main.ui',
 
     _init: function(params) {
-        params.title = "";
+        params.title = '';
         this.parent(params);
     }
 });
