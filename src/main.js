@@ -3,7 +3,7 @@
  * Copyright (c) 2016 Endless Mobile Inc.
  * All Rights Reserved.
  *
- * This file is the file first run by the entrypoint to the mission-game-manager
+ * This file is the file first run by the entrypoint to the coding-game-manager
  * package.
  */
 pkg.initGettext();
@@ -24,12 +24,12 @@ const Wnck = imports.gi.Wnck;
 
 const Lang = imports.lang;
 
-const MISSION_MANAGER_NAME = 'com.endlessm.Mission.Manager';
-const MISSION_MANAGER_PATH = '/com/endlessm/Mission/Manager';
-const MISSION_MANAGER_IFACE = 'com.endlessm.Mission.Manager';
+const CODING_MANAGER_NAME = 'com.endlessm.Coding.Manager';
+const CODING_MANAGER_PATH = '/com/endlessm/Coding/Manager';
+const CODING_MANAGER_IFACE = 'com.endlessm.Coding.Manager';
 const SIDE_COMPONENT_ROLE = 'eos-side-component';
 
-const MissionManagerIface = '<node><interface name="' + MISSION_MANAGER_NAME + '">' +
+const CodingManagerIface = '<node><interface name="' + CODING_MANAGER_NAME + '">' +
   '<method name="show">' +
     '<arg type="u" direction="in" name="timestamp"/>' +
   '</method>' +
@@ -39,10 +39,10 @@ const MissionManagerIface = '<node><interface name="' + MISSION_MANAGER_NAME + '
   '<property name="Visible" type="b" access="read"/>' +
 '</interface></node>';
 
-const MissionManagerMainWindow = new Lang.Class({
-    Name: 'MissionManagerMainWindow',
+const CodingManagerMainWindow = new Lang.Class({
+    Name: 'CodingManagerMainWindow',
     Extends: Gtk.ApplicationWindow,
-    Template: 'resource:///com/endlessm/Mission/Manager/main.ui',
+    Template: 'resource:///com/endlessm/Coding/Manager/main.ui',
 
     _init: function(params) {
         params.title = '';
@@ -58,22 +58,22 @@ function load_style_sheet(resourcePath) {
                                              Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
-const MissionManagerApplication = new Lang.Class({
-    Name: 'MissionManagerApplication',
+const CodingManagerApplication = new Lang.Class({
+    Name: 'CodingManagerApplication',
     Extends: Gtk.Application,
 
     _init: function() {
         this.parent({ application_id: pkg.name });
-        GLib.set_application_name(_("Mission Manager"));
+        GLib.set_application_name(_("Coding Manager"));
         this.Visible = false;
     },
 
     vfunc_startup: function() {
         this.parent();
 
-        load_style_sheet('/com/endlessm/Mission/Manager/application.css');
+        load_style_sheet('/com/endlessm/Coding/Manager/application.css');
 
-        this._window = new MissionManagerMainWindow({
+        this._window = new CodingManagerMainWindow({
             application: this,
             type_hint: Gdk.WindowTypeHint.DOCK,
             role: SIDE_COMPONENT_ROLE
@@ -97,7 +97,7 @@ const MissionManagerApplication = new Lang.Class({
     },
 
     vfunc_dbus_register: function(connection, path) {
-        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(MissionManagerIface, this);
+        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(CodingManagerIface, this);
         this._dbusImpl.export(Gio.DBus.session, path);
 
         return this.parent(connection, path);
@@ -119,14 +119,14 @@ const MissionManagerApplication = new Lang.Class({
     _on_visibility_changed: function() {
         this.Visible = this._window.is_visible();
         let propChangedVariant = new GLib.Variant('(sa{sv}as)', [
-            MISSION_MANAGER_IFACE, {
+            CODING_MANAGER_IFACE, {
                 'Visible': new GLib.Variant('b', this.Visible)
             },
             []
         ]);
 
         Gio.DBus.session.emit_signal(null,
-                                     MISSION_MANAGER_PATH,
+                                     CODING_MANAGER_PATH,
                                      'org.freedesktop.DBus.Properties',
                                      'PropertiesChanged',
                                      propChangedVariant);
@@ -161,5 +161,5 @@ const MissionManagerApplication = new Lang.Class({
 });
 
 function main(argv) { // eslint-disable-line no-unused-vars
-    return (new MissionManagerApplication()).run(argv);
+    return (new CodingManagerApplication()).run(argv);
 }

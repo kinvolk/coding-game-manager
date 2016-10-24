@@ -1,31 +1,31 @@
 # Resources
-resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/src --generate-dependencies $(srcdir)/src/com.endlessm.Mission.Manager.src.gresource.xml)
-app_resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/data --generate-dependencies $(srcdir)/data/com.endlessm.Mission.Manager.data.gresource.xml)
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/src --generate-dependencies $(srcdir)/src/com.endlessm.Coding.Manager.src.gresource.xml)
+app_resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/data --generate-dependencies $(srcdir)/data/com.endlessm.Coding.Manager.data.gresource.xml)
 
 
 # Set EXTRA_DIST and CLEANFILES initially
 EXTRA_DIST = \
 	$(resource_files) \
 	$(app_resource_files) \
-	src/com.endlessm.Mission.Manager.in \
-	src/com.endlessm.Mission.Manager.src.gresource.xml \
-	data/com.endlessm.Mission.Manager.data.gresource.xml \
+	src/com.endlessm.Coding.Manager.in \
+	src/com.endlessm.Coding.Manager.src.gresource.xml \
+	data/com.endlessm.Coding.Manager.data.gresource.xml \
 	$(NULL)
 
 
-data/com.endlessm.Mission.Manager.data.gresource: data/com.endlessm.Mission.Manager.data.gresource.xml $(app_resource_files)
+data/com.endlessm.Coding.Manager.data.gresource: data/com.endlessm.Coding.Manager.data.gresource.xml $(app_resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir)/data $<
 
-src/com.endlessm.Mission.Manager.src.gresource: src/com.endlessm.Mission.Manager.src.gresource.xml $(resource_files)
+src/com.endlessm.Coding.Manager.src.gresource: src/com.endlessm.Coding.Manager.src.gresource.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir)/src $<
 
 
-Manager_resources = data/com.endlessm.Mission.Manager.data.gresource \
-		    src/com.endlessm.Mission.Manager.src.gresource \
+Manager_resources = data/com.endlessm.Coding.Manager.data.gresource \
+		    src/com.endlessm.Coding.Manager.src.gresource \
 		    $(NULL)
 
 
-src/com.endlessm.Mission.Manager: src/com.endlessm.Mission.Manager.in $(Manager_resources)
+src/com.endlessm.Coding.Manager: src/com.endlessm.Coding.Manager.in $(Manager_resources)
 	$(AM_V_GEN) sed \
 		-e "s|[@]GJS@|$(GJS)|g" \
 		-e "s|[@]PACKAGE_VERSION@|$(PACKAGE_VERSION)|g" \
@@ -37,10 +37,10 @@ src/com.endlessm.Mission.Manager: src/com.endlessm.Mission.Manager.in $(Manager_
 	echo $(app_resource_files)
 
 # Scripts to install
-bin_SCRIPTS = src/com.endlessm.Mission.Manager
+bin_SCRIPTS = src/com.endlessm.Coding.Manager
 
 # Distclean
-CLEANFILES = src/com.endlessm.Mission.Manager \
+CLEANFILES = src/com.endlessm.Coding.Manager \
 	$(Manager_resources) \
 	$(NULL)
 
