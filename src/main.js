@@ -54,9 +54,9 @@ const MissionManagerMainWindow = new Lang.Class({
     }
 });
 
-function load_style_sheet(name) {
+function load_style_sheet(resourcePath) {
     let provider = new Gtk.CssProvider();
-    provider.load_from_file(Gio.File.new_for_uri('resource://' + name));
+    provider.load_from_resource(resourcePath);
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
                                              provider,
                                              Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
