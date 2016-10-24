@@ -103,10 +103,6 @@ const MissionManagerApplication = new Lang.Class({
         Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
     },
 
-    vfunc_shutdown: function() {
-        this.parent();
-    },
-
     vfunc_activate: function() {
         /* This does nothing -we should only show when the shell asks us */
     },
