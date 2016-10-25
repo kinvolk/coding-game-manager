@@ -1,19 +1,15 @@
-# All javascript modules
-all_js_files = \
-	src/main.js \
-	$(NULL)
-
 # Resources
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/src --generate-dependencies $(srcdir)/src/com.endlessm.Mission.Manager.src.gresource.xml)
 app_resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/data --generate-dependencies $(srcdir)/data/com.endlessm.Mission.Manager.data.gresource.xml)
 
 
 # Set EXTRA_DIST and CLEANFILES initially
-AM_CONFIG_MACRO_DIR =
-EXTRA_DIST = $(all_js_files) \
+EXTRA_DIST = \
+	$(resource_files) \
+	$(app_resource_files) \
 	src/com.endlessm.Mission.Manager.in \
 	src/com.endlessm.Mission.Manager.src.gresource.xml \
-	src/com.endlessm.Mission.Manager.data.gresource.xml \
+	data/com.endlessm.Mission.Manager.data.gresource.xml \
 	$(NULL)
 
 
