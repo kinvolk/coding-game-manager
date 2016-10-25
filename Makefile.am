@@ -26,6 +26,7 @@ src/com.endlessm.Coding.Manager.src.gresource: $(srcdir)/src/com.endlessm.Coding
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir)/src $<
 
 src/com.endlessm.Coding.Manager: $(srcdir)/src/com.endlessm.Coding.Manager.in $(manager_resources)
+	$(AM_V_GEN) mkdir -p src
 	$(AM_V_GEN) sed \
 		-e "s|[@]GJS@|$(GJS)|g" \
 		-e "s|[@]PACKAGE_VERSION@|$(PACKAGE_VERSION)|g" \
