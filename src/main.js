@@ -79,9 +79,6 @@ const MissionManagerApplication = new Lang.Class({
             role: SIDE_COMPONENT_ROLE
         });
 
-        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(MissionManagerIface, this);
-        this._dbusImpl.export(Gio.DBus.session, MISSION_MANAGER_PATH);
-
         this._update_geometry();
 
         this._window.connect('notify::visible', Lang.bind(this, this._on_visibility_changed));
@@ -97,6 +94,13 @@ const MissionManagerApplication = new Lang.Class({
          * best place to deal with this is in the window manager itself. */
         Gdk.Screen.get_default().connect('monitors-changed', Lang.bind(this, this._update_geometry));
         Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
+    },
+
+    vfunc_dbus_register: function(connection, path) {
+        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(MissionManagerIface, this);
+        this._dbusImpl.export(Gio.DBus.session, path);
+
+        return this.parent(connection, path);
     },
 
     vfunc_activate: function() {
