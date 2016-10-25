@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <template class="Gjs_MissionChatboxMainWindow" parent="GtkApplicationWindow">
+  <template class="Gjs_MissionManagerMainWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
     <property name="height-request">800</property>
     <child>
@@ -43,76 +43,6 @@
             <child type="tab">
               <object class="GtkLabel" id="notebook-tab-storage">
                 <property name="label">Storage</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox" id="vbox">
-                <property name="can_focus">False</property>
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <style>
-                  <class name="notebook-content"/>
-                </style>
-                <child>
-                  <object class="GtkBox" id="hbox">
-                    <property name="can_focus">False</property>
-                    <property name="visible">True</property>
-                    <style>
-                      <class name="game-content"/>
-                    </style>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="width-request">300</property>
-                        <child>
-                          <object class="GtkListBox" id="chatbox-list-box">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="vexpand">True</property>
-                            <property name="hexpand">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="width-request">500</property>
-                        <child>
-                          <object class="GtkStack" id="chatbox-stack">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="width-request">500</property>
-                            <property name="transition-type">slide-left-right</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="notebook-tab-chat">
-                <property name="label">Chat</property>
               </object>
             </child>
           </object>
