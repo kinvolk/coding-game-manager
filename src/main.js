@@ -11,13 +11,9 @@ pkg.initFormat();
 pkg.require({
     Gdk: '3.0',
     GdkX11: '3.0',
-    GdkPixbuf: '2.0',
     Gtk: '3.0',
     Gio: '2.0',
     GLib: '2.0',
-    GObject: '2.0',
-    Pango: '1.0',
-    PangoCairo: '1.0'
 });
 
 const Gdk = imports.gi.Gdk;
