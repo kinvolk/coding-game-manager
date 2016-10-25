@@ -3,7 +3,7 @@
  * Copyright (c) 2016 Endless Mobile Inc.
  * All Rights Reserved.
  *
- * This file is the file first run by the entrypoint to the mission-chatbox
+ * This file is the file first run by the entrypoint to the mission-game-manager
  * package.
  */
 pkg.initGettext();
