@@ -4,6 +4,7 @@
   <template class="Gjs_CodingManagerMainWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
     <property name="height-request">800</property>
+    <property name="width-request">250</property>
     <child>
       <object class="GtkBox"> id="notebook-container">
         <property name="visible">True</property>
@@ -15,14 +16,378 @@
           <!-- We may need to use GtkStack here if GtkNotebook is too inflexible -->
           <object class="GtkNotebook" id="tabs">
             <property name="visible">True</property>
+            <style>
+              <class name="game-notebook"/>
+            </style>
             <child>
-              <object class="GtkLabel">
-                <style>
-                  <class name="game-content"/>
-                  <class name="notebook-content"/>
-                </style>
+              <!-- A single vertical box with margins on the left and right -->
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="label">Placeholder for 'You' section</property>
+                <property name="orientation">vertical</property>
+                <property name="margin">30</property>
+                <child>
+                  <!-- A vertical box to hold the player's information -->
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="margin">20</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="player-avatar">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="player-name">
+                        <property name="visible">True</property>
+                        <property name="label"></property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <!-- A horizontal box containing a stage and points counter -->
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="margin-bottom">10</property>
+                    <property name="spacing">10</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <!-- A vertical box containing the stage information -->
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <style>
+                            <class name="rounded-bubble"/>
+                        </style>
+                        <child>
+                          <object class="GtkDrawingArea" id="stage-avatar">
+                            <property name="visible">True</property>
+                            <property name="height-request">60</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="halign">center</property>
+                            <property name="spacing">5</property>
+                            <style>
+                              <class name="header-small"/>
+                              <class name="separated-bubble-internal-medium"/>
+                            </style>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="label">Stage</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="header-medium"/>
+                                </style>
+                                <child>
+                                  <object class="GtkLabel" id="current-stage-number">
+                                    <property name="visible">True</property>
+                                    <property name="label"></property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <!-- A vertical box containing the points information -->
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <style>
+                            <class name="rounded-bubble"/>
+                        </style>
+                        <child>
+                          <object class="GtkDrawingArea" id="points-avatar">
+                            <property name="visible">True</property>
+                            <property name="height-request">60</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="halign">center</property>
+                            <property name="spacing">5</property>
+                            <style>
+                              <class name="header-small"/>
+                              <class name="separated-bubble-internal-medium"/>
+                            </style>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="header-medium"/>
+                                </style>
+                                <child>
+                                  <object class="GtkLabel" id="current-points">
+                                    <property name="visible">True</property>
+                                    <property name="label"></property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="label">Points</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <!-- A vertical box containing information on the current task -->
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">True</property>
+                    <style>
+                        <class name="rounded-bubble"/>
+                    </style>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
+                        <property name="margin">0</property>
+                        <child>
+                          <!-- Box to pad children -->
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="hexpand">True</property>
+                            <style>
+                              <class name="separated-bubble-internal"/>
+                            </style>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="margin-bottom">15</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="margin-bottom">20</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="hexpand">True</property>
+                                        <property name="visible">True</property>
+                                        <property name="label">CURRENT CHALLENGE</property>
+                                      </object>
+                                    </child>
+                                    <style>
+                                      <class name="section-header"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="hexpand">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="current-task-label">
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="label"></property>
+                                      </object>
+                                    </child>
+                                    <style>
+                                      <class name="header-large"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="current-task-reward">
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="current-task-desc">
+                                    <property name="visible">True</property>
+                                    <property name="label"></property>
+                                    <property name="wrap">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="max-width-chars">45</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <style>
+                                  <class name="separated-bubble-internal"/>
+                                </style>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="hexpand">True</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="margin-bottom">5</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="hexpand">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="visible">True</property>
+                                            <property name="label">HINT</property>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="section-header"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="current-task-hint">
+                                        <property name="visible">True</property>
+                                        <property name="label"></property>
+                                        <property name="wrap">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="max-width-chars">20</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSeparator">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <style>
+                                  <class name="separated-bubble-internal"/>
+                                </style>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="spacing">5</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="hexpand">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="visible">True</property>
+                                            <property name="label">PROGRESS</property>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="section-header"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="spacing">3</property>
+                                        <child>
+                                          <object class="GtkBox">
+                                            <property name="visible">True</property>
+                                            <style>
+                                              <class name="header-medium"/>
+                                            </style>
+                                            <child>
+                                              <object class="GtkLabel" id="current-task-parts-completed">
+                                                <property name="visible">True</property>
+                                                <property name="label"></property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label">of</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox">
+                                            <property name="visible">True</property>
+                                            <style>
+                                              <class name="header-medium"/>
+                                            </style>
+                                            <child>
+                                              <object class="GtkLabel" id="current-task-parts-total">
+                                                <property name="visible">True</property>
+                                                <property name="label"></property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label">artifacts</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkProgressBar" id="current-task-progress">
+                                        <property name="visible">True</property>
+                                        <property name="fraction">0.0</property>
+                                        <property name="margin-top">4</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                           </object>
+                         </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child type="tab">
@@ -31,18 +396,32 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <style>
-                  <class name="game-content"/>
-                  <class name="notebook-content"/>
-                </style>
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="label">Placeholder for 'Storage' section</property>
+                <property name="orientation">vertical</property>
+                <property name="margin">30</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label">Sort by: stage, kind</property>
+                    <property name="halign">start</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="inventory-bubbles">
+                    <property name="visible">True</property>
+                    <property name="spacing">10</property>
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="notebook-tab-storage">
-                <property name="label">Storage</property>
+              <object class="GtkLabel" id="notebook-tab-inventory">
+                <property name="label">Inventory</property>
               </object>
             </child>
           </object>

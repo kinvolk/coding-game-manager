@@ -1,14 +1,78 @@
-.notebook-content {
-    border-bottom-left-radius: 10px;
-    border-top-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+notebook > header > tabs > tab {
+  color: #80bfe6;
+  box-shadow: none;
+}
+notebook > header > tabs > tab:hover {
+  color: #81c0e7;
+  box-shadow: inset 0 -3px #81c0e7;
+}
+notebook > header > tabs > tab:checked {
+  color: #ffffff;
+  box-shadow: inset 0 -3px #ffffff;
+}
+.rounded-bubble {
+  background-color: #8a8b8f;
+  border-radius: 0.4em;
+}
+.rounded-bubble label {
+  color: #b0b1b3;
+}
+.bubble-inner {
+  background-color: #7d7e82;
+  border-radius: 0.4em;
+}
+.section-header label {
+  color: #59595b;
+  font-weight: bolder;
+  font-size: 9pt;
+}
+.inventory-link label {
+  color: #85b0ca;
+  font-weight: bold;
+}
+.header-large label {
+  font-size: 18pt;
+  font-weight: bolder;
+  color: #feffff;
+}
+.header-medium label {
+  font-size: 14pt;
+  font-weight: bolder;
+  color: #feffff;
+}
+.header-small label {
+  color: #feffff;
 }
 
-.game-content {
-    background-color: #818286;
+progressbar {
+  border-color: #7f8084;
+  border-radius: 0.4em;
 }
 
-.manager-container {
-    padding: 40px;
-    background-color: #717274;
+progressbar trough {
+  border-color: #7f8084;
+  min-height: 10px;
+  background-color: #737478;
+  border-radius: 0.4em;
+}
+progressbar trough progress {
+  border-width: 0;
+  min-height: 10px;
+  background-color: #CCCCCC;
+  border-top-left-radius: 0.4em;
+  border-bottom-left-radius: 0.4em;
+  border-top-right-radius: 0em;
+  border-bottom-right-radius: 0em;
+}
+.separated-bubble-internal {
+  padding: 20px;
+}
+.separated-bubble-internal-medium {
+  padding: 15px;
+}
+.separated-bubble-internal-small {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
