@@ -16,7 +16,7 @@ pkg.require({
     GLib: '2.0',
 });
 
-const CodingGameDBUSService = imports.gi.CodingGameService
+const CodingGameService = imports.gi.CodingGameService
 const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -139,11 +139,11 @@ const CodingManagerMainWindow = new Lang.Class({
     Extends: Gtk.ApplicationWindow,
     Properties: {
         service: GObject.ParamSpec.object('service',
-                                          'A CodingGameDBUSService.CodingGameServiceProxy',
-                                          'A CodingGameDBUSService.CodingGameServiceProxy to retrieve state information from',
+                                          'A CodingGameService.CodingGameServiceProxy',
+                                          'A CodingGameService.CodingGameServiceProxy to retrieve state information from',
                                           GObject.ParamFlags.READWRITE |
                                           GObject.ParamFlags.CONSTRUCT_ONLY,
-                                          CodingGameDBUSService.CodingGameServiceProxy)
+                                          CodingGameService.CodingGameServiceProxy)
     },
     Template: 'resource:///com/endlessm/Coding/Manager/main.ui',
     Children: [
@@ -230,14 +230,12 @@ const CodingManagerApplication = new Lang.Class({
         Gtk.Settings.get_default().gtk_application_prefer_dark_theme = true;
         load_style_sheet('/com/endlessm/Coding/Manager/application.css');
 
-        let name = 'com.endlessm.CodingGameService.Service';
-        let path = '/com/endlessm/CodingGameService/Service';
-        this._service = CodingGameDBUSService.CodingGameServiceProxy
-                                             .new_for_bus_sync(Gio.BusType.SESSION,
-                                                               0,
-                                                               name,
-                                                               path,
-                                                               null);
+        this._service = CodingGameService.CodingGameServiceProxy.new_for_bus_sync(
+            Gio.BusType.SESSION,
+            0,
+            'com.endlessm.CodingGameService.Service',
+            '/com/endlessm/CodingGameService/Service',
+            null);
         this._window = new CodingManagerMainWindow({
             application: this,
             type_hint: Gdk.WindowTypeHint.DOCK,
