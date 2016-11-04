@@ -171,10 +171,8 @@ const CodingManagerMainWindow = new Lang.Class({
         this.player_name.label = GLib.get_real_name();
         this.current_stage_number.label = '1';
         this.current_task_hint.label = "Makes you think about the academy all the time";
-        this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
         this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
-        this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
-                                               this.service.current_mission_num_tasks_available);
+        this._updateCurrentMission();
 
         /* Bind properties so that they automatically update when the game service
          * state changes */
@@ -193,17 +191,15 @@ const CodingManagerMainWindow = new Lang.Class({
 
         /* We don't use GBinding for the below since we have to bind two properties
          * to each (the progress bar and the label) */
-        this.service.connect('notify::current-mission-num-tasks', Lang.bind(this, function() {
-            this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
-                                                   this.service.current_mission_num_tasks_available);
-            this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
-        }));
-        this.service.connect('notify::current-mission-num-tasks-available', Lang.bind(this, function() {
-            this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
-                                                   this.service.current_mission_num_tasks_available);
-            this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
-        }));
+        this.service.connect('notify::current-mission-num-tasks', Lang.bind(this, this._updateCurrentMission));
+        this.service.connect('notify::current-mission-num-tasks-available', Lang.bind(this, this._updateCurrentMission));
     },
+
+    _updateCurrentMission: function() {
+        this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
+                                               this.service.current_mission_num_tasks_available);
+        this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
+    }
 });
 
 function load_style_sheet(resourcePath) {
