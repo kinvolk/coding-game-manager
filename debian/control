@@ -18,8 +18,10 @@ Package: coding-game-manager
 Section: non-free/libs
 Architecture: any
 Depends: ${misc:Depends},
+         coding-game-service,
          gir1.2-glib-2.0,
          gir1.2-gtk-3.0,
+         gir1.2-coding-game-service-0,
          gir1.2-wnck-3.0
 Description: Coding Game Manager
  The game manager view for the coding game.
