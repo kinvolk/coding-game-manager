@@ -7,15 +7,25 @@ resource_DATA = data/com.endlessm.Coding.Manager.data.gresource \
 		src/com.endlessm.Coding.Manager.src.gresource \
 		$(NULL)
 
+servicedir = $(datadir)/dbus-1/services
+service_DATA = $(service_in_files:.service.in=.service)
+service_in_files = \
+	data/com.endlessm.Coding.Manager.service.in \
+        $(NULL)
+
 # Set EXTRA_DIST and CLEANFILES initially
 EXTRA_DIST = \
 	$(resource_files) \
+	$(service_in_files) \
 	$(app_resource_files) \
 	src/com.endlessm.Coding.Manager.in \
 	src/com.endlessm.Coding.Manager.src.gresource.xml \
 	data/com.endlessm.Coding.Manager.data.gresource.xml \
 	$(NULL)
 
+data/com.endlessm.Coding.Manager.service: $(srcdir)/data/com.endlessm.Coding.Manager.service.in
+	$(AM_V_GEN) mkdir -p data
+	$(AM_V_GEN) sed -e "s|\@bindir\@|$(bindir)|" $< > $@
 
 data/com.endlessm.Coding.Manager.data.gresource: $(srcdir)/data/com.endlessm.Coding.Manager.data.gresource.xml $(app_resource_files)
 	$(AM_V_GEN) mkdir -p data
@@ -43,6 +53,7 @@ bin_SCRIPTS = src/com.endlessm.Coding.Manager
 # Distclean
 CLEANFILES = \
 	$(resource_DATA) \
+	$(service_DATA) \
 	src/com.endlessm.Coding.Manager \
 	$(NULL)
 
