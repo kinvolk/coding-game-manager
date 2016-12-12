@@ -160,6 +160,7 @@ const CodingManagerMainWindow = new Lang.Class({
         'current-task-parts-completed',
         'current-task-parts-total',
         'current-task-progress',
+        'reset-button'
     ],
 
     _init: function(params) {
