@@ -197,7 +197,10 @@ const CodingManagerMainWindow = new Lang.Class({
         // When the user presses the reset button, tell the game service to drop all
         // of its state and restart the game
         this.reset_button.connect('clicked', Lang.bind(this, function() {
-            this.service.call_reset_game_sync(null);
+            // We just call this async and ignore the return value. There isn't a whole lot
+            // we can do if this fails - the error will be logged by coding-game-service
+            // anyway and the best that we can do is log it again.
+            this.service.call_reset_game(null, null);
         }));
     },
 
