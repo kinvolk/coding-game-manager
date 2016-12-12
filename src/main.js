@@ -193,6 +193,12 @@ const CodingManagerMainWindow = new Lang.Class({
         // to each (the progress bar and the label)
         this.service.connect('notify::current-mission-num-tasks', Lang.bind(this, this._updateCurrentMission));
         this.service.connect('notify::current-mission-num-tasks-available', Lang.bind(this, this._updateCurrentMission));
+
+        // When the user presses the reset button, tell the game service to drop all
+        // of its state and restart the game
+        this.reset_button.connect('clicked', Lang.bind(this, function() {
+            this.service.call_reset_game_sync(null);
+        }));
     },
 
     _updateCurrentMission: function() {
