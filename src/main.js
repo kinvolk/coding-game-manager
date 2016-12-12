@@ -1,11 +1,10 @@
-/* src/main.js
- *
- * Copyright (c) 2016 Endless Mobile Inc.
- * All Rights Reserved.
- *
- * This file is the file first run by the entrypoint to the coding-game-manager
- * package.
- */
+// src/main.js
+//
+// Copyright (c) 2016 Endless Mobile Inc.
+// All Rights Reserved.
+//
+// This file is the file first run by the entrypoint to the coding-game-manager
+// package.
 pkg.initGettext();
 pkg.initFormat();
 pkg.require({
@@ -174,8 +173,8 @@ const CodingManagerMainWindow = new Lang.Class({
         this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
         this._updateCurrentMission();
 
-        /* Bind properties so that they automatically update when the game service
-         * state changes */
+        // Bind properties so that they automatically update when the game service
+        // state changes
         this.service.bind_property('current-mission-name',
                                    this.current_task_label,
                                    'label',
@@ -189,8 +188,8 @@ const CodingManagerMainWindow = new Lang.Class({
                                    'label',
                                    GObject.BindingFlags.SYNC_CREATE);
 
-        /* We don't use GBinding for the below since we have to bind two properties
-         * to each (the progress bar and the label) */
+        // We don't use GBinding for the below since we have to bind two properties
+        // to each (the progress bar and the label)
         this.service.connect('notify::current-mission-num-tasks', Lang.bind(this, this._updateCurrentMission));
         this.service.connect('notify::current-mission-num-tasks-available', Lang.bind(this, this._updateCurrentMission));
     },
@@ -243,15 +242,15 @@ const CodingManagerApplication = new Lang.Class({
 
         this._window.connect('notify::visible', Lang.bind(this, this._on_visibility_changed));
 
-        /* NOTE: At least on VMWare, I'm noticing some bugs here where
-         * monitors-changed is being fired when the work-area for the monitor
-         * is still the old value and not then new value. We're racing with
-         * the shell here because it also needs to update _NET_WORKAREA in
-         * response to the monitor layout changing.
-         *
-         * I'm not sure what to do with this at the moment, so I've filed
-         * https://bugzilla.gnome.org/show_bug.cgi?id=773195 . Perhaps the
-         * best place to deal with this is in the window manager itself. */
+        // NOTE: At least on VMWare, I'm noticing some bugs here where
+        // monitors-changed is being fired when the work-area for the monitor
+        // is still the old value and not then new value. We're racing with
+        // the shell here because it also needs to update _NET_WORKAREA in
+        // response to the monitor layout changing.
+        //
+        // I'm not sure what to do with this at the moment, so I've filed
+        // https://bugzilla.gnome.org/show_bug.cgi?id=773195 . Perhaps the
+        // best place to deal with this is in the window manager itself.
         Gdk.Screen.get_default().connect('monitors-changed', Lang.bind(this, this._update_geometry));
         Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
     },
@@ -264,7 +263,7 @@ const CodingManagerApplication = new Lang.Class({
     },
 
     vfunc_activate: function() {
-        /* This does nothing -we should only show when the shell asks us */
+        // This does nothing -we should only show when the shell asks us
     },
 
     show: function(timestamp) {
