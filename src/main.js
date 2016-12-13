@@ -77,61 +77,11 @@ const CodingInventoryItemBubble = new Lang.Class({
         this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.DEFAULT)
         this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.DEFAULT)
         this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.DEFAULT)
-        this.artifact_name.label = this.artifact_stage_number_label.label = this.stage;
+        this.artifact_name.label = this.name;
+        this.artifact_stage_number_label.label = this.stage;
         this.artifact_points_label.label = this.points;
     }
 });
-
-const MOCK_BUBBLES = [
-    {
-        icon: 'music.png',
-        name: 'Chopin_Ballad.mp3',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'camera.png',
-        name: 'Poland_tree.jpg',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'video.png',
-        name: 'Orchestra.mp4',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'document',
-        name: 'Charade.doc',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'key.png',
-        name: 'Key',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'video.png',
-        name: 'Orchestra.mp4',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'document',
-        name: 'Charade.doc',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'key.png',
-        name: 'Key',
-        stage: '1',
-        points: '55'
-    }
-];
 
 const CodingManagerMainWindow = new Lang.Class({
     Name: 'CodingManagerMainWindow',
@@ -165,9 +115,6 @@ const CodingManagerMainWindow = new Lang.Class({
 
     _init: function(params) {
         this.parent(params);
-        MOCK_BUBBLES.forEach(Lang.bind(this, function(bubble_spec) {
-            this.inventory_bubbles.pack_end(new CodingInventoryItemBubble(bubble_spec), false, false, 0);
-        }));
         this.player_name.label = GLib.get_real_name();
         this.current_stage_number.label = '1';
         this.current_task_hint.label = "Makes you think about the academy all the time";
