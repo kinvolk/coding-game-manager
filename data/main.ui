@@ -389,7 +389,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="reset-button">
                     <property name="vexpand">True</property>
                     <property name="valign">end</property>
                     <property name="visible">True</property>
