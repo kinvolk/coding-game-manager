@@ -120,6 +120,7 @@ const CodingManagerMainWindow = new Lang.Class({
         this.current_task_hint.label = "Makes you think about the academy all the time";
         this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
         this._updateCurrentMission();
+        this._updateEarnedArtifacts();
 
         // Bind properties so that they automatically update when the game service
         // state changes
@@ -141,6 +142,10 @@ const CodingManagerMainWindow = new Lang.Class({
         this.service.connect('notify::current-mission-num-tasks', Lang.bind(this, this._updateCurrentMission));
         this.service.connect('notify::current-mission-num-tasks-available', Lang.bind(this, this._updateCurrentMission));
 
+        // When a new artifact comes in, we will need to empty the artifacts
+        // container and add the new one
+        this.service.connect('notify::earned-artifacts', Lang.bind(this, this._updateEarnedArtifacts));
+
         // When the user presses the reset button, tell the game service to drop all
         // of its state and restart the game
         this.reset_button.connect('clicked', Lang.bind(this, function() {
@@ -148,6 +153,25 @@ const CodingManagerMainWindow = new Lang.Class({
             // we can do if this fails - the error will be logged by coding-game-service
             // anyway and the best that we can do is log it again.
             this.service.call_reset_game(null, null);
+        }));
+    },
+
+    _updateEarnedArtifacts: function() {
+        // Remove all children first
+        this.inventory_bubbles.get_children().forEach(Lang.bind(this, function(child) {
+            this.inventory_bubbles.remove(child);
+        }));
+
+        // Create new bubbles for everything
+        this.service.earned_artifacts.map(function(artifact) {
+            return JSON.parse(artifact);
+        }).forEach(Lang.bind(this, function(artifact) {
+            this.inventory_bubbles.pack_start(new CodingInventoryItemBubble({
+                icon: artifact.icon,
+                name: artifact.desc,
+                points: String(artifact.points),
+                stage: String(artifact.stage)
+            }), false, false, 0);
         }));
     },
 
