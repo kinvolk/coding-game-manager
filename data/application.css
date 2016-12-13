@@ -76,3 +76,8 @@ progressbar trough progress {
   padding-left: 4px;
   padding-right: 4px;
 }
+.inline-button {
+    background-image: none;
+    border-width: 1px;
+    outline-width: 0px;
+}
