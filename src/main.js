@@ -74,13 +74,10 @@ const CodingInventoryItemBubble = new Lang.Class({
 
     _init: function(params) {
         this.parent(params);
-        this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.DEFAULT);
-        this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.DEFAULT);
-        this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.DEFAULT);
-        this.bind_property('icon', this.artifact_icon_drawing_area, 'icon-name', GObject.BindingFlags.DEFAULT);
-        this.artifact_name.label = this.name;
-        this.artifact_stage_number_label.label = this.stage;
-        this.artifact_points_label.label = this.points;
+        this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.SYNC_CREATE);
+        this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.SYNC_CREATE);
+        this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.SYNC_CREATE);
+        this.bind_property('icon', this.artifact_icon_drawing_area, 'icon-name', GObject.BindingFlags.SYNC_CREATE);
     }
 });
 
@@ -117,9 +114,6 @@ const CodingManagerMainWindow = new Lang.Class({
     _init: function(params) {
         this.parent(params);
         this.player_name.label = GLib.get_real_name();
-        this.current_stage_number.label = String(this.service.current_mission_stage_num);
-        this.current_task_hint.label = String(this.service.current_task_hint);
-        this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
         this._updateCurrentMission();
         this._updateEarnedArtifacts();
 
@@ -188,6 +182,7 @@ const CodingManagerMainWindow = new Lang.Class({
         this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
                                                this.service.current_mission_num_tasks_available);
         this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
+        this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
     }
 });
 
