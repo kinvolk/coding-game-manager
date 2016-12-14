@@ -116,8 +116,8 @@ const CodingManagerMainWindow = new Lang.Class({
     _init: function(params) {
         this.parent(params);
         this.player_name.label = GLib.get_real_name();
-        this.current_stage_number.label = '1';
-        this.current_task_hint.label = "Makes you think about the academy all the time";
+        this.current_stage_number.label = String(this.service.current_mission_stage_num);
+        this.current_task_hint.label = String(this.service.current_task_hint);
         this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
         this._updateCurrentMission();
         this._updateEarnedArtifacts();
