@@ -13,7 +13,7 @@
         <property name="visible">True</property>
         <property name="hexpand">True</property>
         <child>
-          <object class="GtkImage" id="artifact-icon-drawing-area">
+          <object class="GtkImage" id="artifact-icon-image">
             <property name="visible">True</property>
             <property name="height-request">48</property>
             <property name="width-request">48</property>
