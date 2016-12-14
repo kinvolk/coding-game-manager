@@ -77,7 +77,7 @@ const CodingInventoryItemBubble = new Lang.Class({
         this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.DEFAULT);
         this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.DEFAULT);
         this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.DEFAULT);
-        this.bind_property('icon', this.artifact_icon_drawing_area, 'label', GObject.BindingFlags.DEFAULT);
+        this.bind_property('icon', this.artifact_icon_drawing_area, 'icon-name', GObject.BindingFlags.DEFAULT);
         this.artifact_name.label = this.name;
         this.artifact_stage_number_label.label = this.stage;
         this.artifact_points_label.label = this.points;
