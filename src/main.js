@@ -166,14 +166,14 @@ const CodingManagerMainWindow = new Lang.Class({
         }));
 
         // Create new bubbles for everything
-        this.service.earned_artifacts.map(function(artifact) {
-            return JSON.parse(artifact);
-        }).forEach(Lang.bind(this, function(artifact) {
+        this.service.earned_artifacts.deep_unpack().forEach(Lang.bind(this, function(artifact) {
             this.inventory_bubbles.pack_start(new CodingInventoryItemBubble({
-                icon: artifact.icon,
-                name: artifact.desc,
-                points: String(artifact.points),
-                stage: String(artifact.stage)
+                // The annotation for get_string() makes it return an array
+                // of both the string and the corresponding length
+                icon: artifact.icon.get_string()[0],
+                name: artifact.desc.get_string()[0],
+                points: artifact.points.get_string()[0],
+                stage: artifact.stage.get_string()[0]
             }), false, false, 0);
         }));
     },
