@@ -162,7 +162,7 @@ const CodingManagerMainWindow = new Lang.Class({
     _updateEarnedArtifacts: function() {
         // Remove all children first
         this.inventory_bubbles.get_children().forEach(Lang.bind(this, function(child) {
-            this.inventory_bubbles.remove(child);
+            child.destroy();
         }));
 
         // Create new bubbles for everything
