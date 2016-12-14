@@ -136,6 +136,10 @@ const CodingManagerMainWindow = new Lang.Class({
                                    this.current_task_desc,
                                    'label',
                                    GObject.BindingFlags.SYNC_CREATE);
+        this.service.bind_property('current-mission-hint',
+                                   this.current_task_hint,
+                                   'label',
+                                   GObject.BindingFlags.SYNC_CREATE);
         this.service.bind_property('current-mission-points',
                                    this.current_points,
                                    'label',
