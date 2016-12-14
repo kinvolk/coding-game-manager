@@ -128,16 +128,10 @@ const CodingManagerMainWindow = new Lang.Class({
                                    this.current_task_label,
                                    'label',
                                    GObject.BindingFlags.SYNC_CREATE);
-        this.service.bind_property_full('current-mission-stage-num',
-                                        this.current_stage_number,
-                                        'label',
-                                        GObject.BindingFlags.SYNC_CREATE,
-                                        function(value) {
-                                            return String(value);
-                                        },
-                                        function(value) {
-                                            return value;
-                                        });
+        this.service.bind_property('current-mission-stage-num',
+                                   this.current_stage_number,
+                                   'label',
+                                   GObject.BindingFlags.SYNC_CREATE);
         this.service.bind_property('current-mission-desc',
                                    this.current_task_desc,
                                    'label',
