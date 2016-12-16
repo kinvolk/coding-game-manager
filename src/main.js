@@ -44,7 +44,7 @@ const CodingInventoryItemBubble = new Lang.Class({
     Name: 'CodingInventoryItemBubble',
     Extends: Gtk.Box,
     Template: 'resource:///com/endlessm/Coding/Manager/inventory-bubble.ui',
-    Children: ['artifact-icon-drawing-area', 'artifact-name', 'artifact-stage-number-label', 'artifact-points-label'],
+    Children: ['artifact-icon-image', 'artifact-name', 'artifact-stage-number-label', 'artifact-points-label'],
     Properties: {
         icon: GObject.ParamSpec.string('icon',
                                        '',
@@ -74,64 +74,12 @@ const CodingInventoryItemBubble = new Lang.Class({
 
     _init: function(params) {
         this.parent(params);
-        this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.DEFAULT)
-        this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.DEFAULT)
-        this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.DEFAULT)
-        this.artifact_name.label = this.artifact_stage_number_label.label = this.stage;
-        this.artifact_points_label.label = this.points;
+        this.bind_property('name', this.artifact_name, 'label', GObject.BindingFlags.SYNC_CREATE);
+        this.bind_property('stage', this.artifact_stage_number_label, 'label', GObject.BindingFlags.SYNC_CREATE);
+        this.bind_property('points', this.artifact_points_label, 'label', GObject.BindingFlags.SYNC_CREATE);
+        this.bind_property('icon', this.artifact_icon_image, 'icon-name', GObject.BindingFlags.SYNC_CREATE);
     }
 });
-
-const MOCK_BUBBLES = [
-    {
-        icon: 'music.png',
-        name: 'Chopin_Ballad.mp3',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'camera.png',
-        name: 'Poland_tree.jpg',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'video.png',
-        name: 'Orchestra.mp4',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'document',
-        name: 'Charade.doc',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'key.png',
-        name: 'Key',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'video.png',
-        name: 'Orchestra.mp4',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'document',
-        name: 'Charade.doc',
-        stage: '1',
-        points: '55'
-    },
-    {
-        icon: 'key.png',
-        name: 'Key',
-        stage: '1',
-        points: '55'
-    }
-];
 
 const CodingManagerMainWindow = new Lang.Class({
     Name: 'CodingManagerMainWindow',
@@ -165,14 +113,9 @@ const CodingManagerMainWindow = new Lang.Class({
 
     _init: function(params) {
         this.parent(params);
-        MOCK_BUBBLES.forEach(Lang.bind(this, function(bubble_spec) {
-            this.inventory_bubbles.pack_end(new CodingInventoryItemBubble(bubble_spec), false, false, 0);
-        }));
         this.player_name.label = GLib.get_real_name();
-        this.current_stage_number.label = '1';
-        this.current_task_hint.label = "Makes you think about the academy all the time";
-        this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
         this._updateCurrentMission();
+        this._updateEarnedArtifacts();
 
         // Bind properties so that they automatically update when the game service
         // state changes
@@ -180,8 +123,16 @@ const CodingManagerMainWindow = new Lang.Class({
                                    this.current_task_label,
                                    'label',
                                    GObject.BindingFlags.SYNC_CREATE);
+        this.service.bind_property('current-mission-stage-num',
+                                   this.current_stage_number,
+                                   'label',
+                                   GObject.BindingFlags.SYNC_CREATE);
         this.service.bind_property('current-mission-desc',
                                    this.current_task_desc,
+                                   'label',
+                                   GObject.BindingFlags.SYNC_CREATE);
+        this.service.bind_property('current-mission-hint',
+                                   this.current_task_hint,
                                    'label',
                                    GObject.BindingFlags.SYNC_CREATE);
         this.service.bind_property('current-mission-points',
@@ -194,6 +145,10 @@ const CodingManagerMainWindow = new Lang.Class({
         this.service.connect('notify::current-mission-num-tasks', Lang.bind(this, this._updateCurrentMission));
         this.service.connect('notify::current-mission-num-tasks-available', Lang.bind(this, this._updateCurrentMission));
 
+        // When a new artifact comes in, we will need to empty the artifacts
+        // container and add the new one
+        this.service.connect('notify::earned-artifacts', Lang.bind(this, this._updateEarnedArtifacts));
+
         // When the user presses the reset button, tell the game service to drop all
         // of its state and restart the game
         this.reset_button.connect('clicked', Lang.bind(this, function() {
@@ -204,10 +159,30 @@ const CodingManagerMainWindow = new Lang.Class({
         }));
     },
 
+    _updateEarnedArtifacts: function() {
+        // Remove all children first
+        this.inventory_bubbles.get_children().forEach(Lang.bind(this, function(child) {
+            child.destroy();
+        }));
+
+        // Create new bubbles for everything
+        this.service.earned_artifacts.deep_unpack().forEach(Lang.bind(this, function(artifact) {
+            this.inventory_bubbles.add(new CodingInventoryItemBubble({
+                // The annotation for get_string() makes it return an array
+                // of both the string and the corresponding length
+                icon: artifact.icon.get_string()[0],
+                name: artifact.desc.get_string()[0],
+                points: artifact.points.get_string()[0],
+                stage: artifact.stage.get_string()[0]
+            }));
+        }));
+    },
+
     _updateCurrentMission: function() {
         this.current_task_progress.fraction = (this.service.current_mission_num_tasks /
                                                this.service.current_mission_num_tasks_available);
         this.current_task_parts_completed.label = String(this.service.current_mission_num_tasks);
+        this.current_task_parts_total.label = String(this.service.current_mission_num_tasks_available);
     }
 });
 
