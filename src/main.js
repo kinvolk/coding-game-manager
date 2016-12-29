@@ -223,20 +223,12 @@ const CodingManagerApplication = new Lang.Class({
             service: this._service
         });
 
-        this._update_geometry();
-
         this._window.connect('notify::visible', Lang.bind(this, this._on_visibility_changed));
 
-        // NOTE: At least on VMWare, I'm noticing some bugs here where
-        // monitors-changed is being fired when the work-area for the monitor
-        // is still the old value and not then new value. We're racing with
-        // the shell here because it also needs to update _NET_WORKAREA in
-        // response to the monitor layout changing.
-        //
-        // I'm not sure what to do with this at the moment, so I've filed
-        // https://bugzilla.gnome.org/show_bug.cgi?id=773195 . Perhaps the
-        // best place to deal with this is in the window manager itself.
-        Gdk.Screen.get_default().connect('monitors-changed', Lang.bind(this, this._update_geometry));
+        let monitor = Gdk.Display.get_default().get_primary_monitor();
+        monitor.connect('notify::workarea', Lang.bind(this, this._update_geometry));
+        this._update_geometry(monitor);
+
         Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
     },
 
@@ -287,10 +279,8 @@ const CodingManagerApplication = new Lang.Class({
         }
     },
 
-    _update_geometry: function() {
-        let screen = Gdk.Screen.get_default();
-        let monitor = Gdk.Screen.get_default().get_primary_monitor();
-        let workarea = screen.get_monitor_workarea(monitor);
+    _update_geometry: function(monitor) {
+        let workarea = monitor.get_workarea();
 
         let geometry = {
             width: this._window.get_size()[0],
