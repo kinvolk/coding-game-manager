@@ -24,6 +24,10 @@ const Wnck = imports.gi.Wnck;
 
 const Lang = imports.lang;
 
+const MyLog = imports.mylog;
+
+MyLog.file('cgm.log');
+
 const CODING_MANAGER_NAME = 'com.endlessm.Coding.Manager';
 const CODING_MANAGER_PATH = '/com/endlessm/Coding/Manager';
 const CODING_MANAGER_IFACE = 'com.endlessm.Coding.Manager';
@@ -198,13 +202,16 @@ const CodingManagerApplication = new Lang.Class({
     Extends: Gtk.Application,
 
     _init: function() {
+        MyLog.start('app init');
         this.parent({ application_id: pkg.name });
         GLib.set_application_name(_("Coding Manager"));
         this.Visible = false;
         this._changedSignalId = 0;
+        MyLog.done();
     },
 
     vfunc_startup: function() {
+        MyLog.start('app startup');
         this.parent();
 
         Gtk.Settings.get_default().gtk_application_prefer_dark_theme = true;
@@ -231,16 +238,31 @@ const CodingManagerApplication = new Lang.Class({
         // the tray button and the sidebar has been made visible,
         // which can lead to the sidebar never been displayed.
         this._window.connect('map-event', Lang.bind(this, function() {
+            MyLog.start('window just got mapped');
             if (!this._changedSignalId) {
+                MyLog.more('connecting to wnck');
                 this._changedSignalId = Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
             }
+            MyLog.done();
             return false;
         }));
         this._window.connect('unmap', Lang.bind(this, function() {
+            MyLog.start('window is about to be unmapped');
             if (this._changedSignalId) {
+                MyLog.more('disconnecting from wnck');
                 Wnck.Screen.get_default().disconnect(this._changedSignalId);
                 this._changedSignalId = 0;
             }
+            MyLog.done();
+        }));
+        this._window.connect('state-flags-changed', Lang.bind(this, function() {
+            MyLog.start('window state flags has changed');
+            if (this.Visible) {
+                MyLog.more('window is visible');
+            } else {
+                MyLog.more('window is hidden');
+            }
+            MyLog.done();
         }));
 
         // update position when workarea changes
@@ -253,29 +275,42 @@ const CodingManagerApplication = new Lang.Class({
         monitor.connect('notify::workarea', Lang.bind(this,
                                                       this._update_geometry));
         this._update_geometry();
+
+        MyLog.done();
     },
 
     vfunc_dbus_register: function(connection, path) {
+        MyLog.start('app dbus register');
         this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(CodingManagerIface, this);
         this._dbusImpl.export(Gio.DBus.session, path);
 
-        return this.parent(connection, path);
+        let parent = this.parent(connection, path)
+        MyLog.done();
+        return parent;
     },
 
     vfunc_activate: function() {
+        MyLog.start('app activate');
         // This does nothing -we should only show when the shell asks us
+        MyLog.done();
     },
 
     show: function(timestamp) {
+        MyLog.start('app show');
         this._window.show();
+        MyLog.more('timestamp: ' + timestamp);
         this._window.present_with_time(timestamp);
+        MyLog.done();
     },
 
     hide: function() {
+        MyLog.start('app hide');
         this._window.hide();
+        MyLog.done();
     },
 
     _on_visibility_changed: function() {
+        MyLog.start('app on visibility changed');
         this.Visible = this._window.is_visible();
         let propChangedVariant = new GLib.Variant('(sa{sv}as)', [
             CODING_MANAGER_IFACE, {
@@ -284,35 +319,46 @@ const CodingManagerApplication = new Lang.Class({
             []
         ]);
 
+        MyLog.more('visible: ' + this.Visible);
         Gio.DBus.session.emit_signal(null,
                                      CODING_MANAGER_PATH,
                                      'org.freedesktop.DBus.Properties',
                                      'PropertiesChanged',
                                      propChangedVariant);
+        MyLog.done();
     },
 
     _on_active_window_changed: function() {
+        MyLog.start('app on active window changed');
         let active_window = Wnck.Screen.get_default().get_active_window();
         let current_window = this._window.get_window();
         let active_window_xid = active_window ? active_window.get_xid() : 0;
         let current_window_xid = current_window ? current_window.get_xid() : 0;
 
+        MyLog.more('active window xid: ' + active_window_xid);
+        MyLog.more('current window xid: ' + current_window_xid);
+
         if (active_window !== null) {
             // try to match transient windows
             let transient_window = active_window.get_transient();
 
+            MyLog.more('transient window xid: ' + ((transient_window !== null) ? transient_window.get_xid(), 0));
             if (transient_window !== null &&
                 current_window_xid === transient_window.get_xid()) {
+                MyLog.done();
                 return;
             }
         }
 
         if (active_window_xid !== current_window_xid) {
+            MyLog.more('hiding self');
             this.hide();
         }
+        MyLog.done();
     },
 
     _update_geometry: function() {
+        MyLog.start('app update geometry');
         let monitor = Gdk.Display.get_default().get_primary_monitor();
         let workarea = monitor.get_workarea();
 
@@ -323,8 +369,10 @@ const CodingManagerApplication = new Lang.Class({
         };
 
         geometry.x = workarea.width - geometry.width;
+        MyLog.more('x: ' + geometry.x + ', y: ' + geometry.y + ', width: ' + geometry.width + ', height: ' + geometry.height);
         this._window.move(geometry.x, geometry.y);
         this._window.resize(geometry.width, geometry.height);
+        MyLog.done();
     }
 });
 
