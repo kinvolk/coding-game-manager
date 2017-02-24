@@ -201,6 +201,7 @@ const CodingManagerApplication = new Lang.Class({
         this.parent({ application_id: pkg.name });
         GLib.set_application_name(_("Coding Manager"));
         this.Visible = false;
+        this._changedSignalId = 0;
     },
 
     vfunc_startup: function() {
@@ -223,6 +224,24 @@ const CodingManagerApplication = new Lang.Class({
         });
 
         this._window.connect('notify::visible', Lang.bind(this, this._on_visibility_changed));
+        // There seems to be a race condition with the WM that can
+        // lead the sidebar into an inconsistent state if the
+        // _on_active_window_changed callback gets executed in such a
+        // way that ends up calling to hide() between the user pressed
+        // the tray button and the sidebar has been made visible,
+        // which can lead to the sidebar never been displayed.
+        this._window.connect('state-flags-changed', Lang.bind(this, function() {
+            if (this.Visible) {
+                if (!this._changedSignalId) {
+                    this._changedSignalId = Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
+                }
+            } else {
+                if (this._changedSignalId) {
+                    Wnck.Screen.get_default().disconnect(this._changedSignalId);
+                    this._changedSignalId = 0;
+                }
+            }
+        }));
 
         // update position when workarea changes
         let display = Gdk.Display.get_default();
@@ -232,10 +251,8 @@ const CodingManagerApplication = new Lang.Class({
                                                    this._update_geometry));
         let monitor = display.get_primary_monitor();
         monitor.connect('notify::workarea', Lang.bind(this,
-						      this._update_geometry));
+                                                      this._update_geometry));
         this._update_geometry();
-
-        Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
     },
 
     vfunc_dbus_register: function(connection, path) {
@@ -279,6 +296,14 @@ const CodingManagerApplication = new Lang.Class({
         let current_window = this._window.get_window();
         let active_window_xid = active_window ? active_window.get_xid() : 0;
         let current_window_xid = current_window ? current_window.get_xid() : 0;
+
+        // try to match transient windows
+        let transient_window = active_window.get_transient();
+
+        if (transient_window != null &&
+            current_window_xid == transient_window.get_xid()) {
+            return;
+        }
 
         if (active_window_xid !== current_window_xid) {
             this.hide();
