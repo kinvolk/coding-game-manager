@@ -230,16 +230,16 @@ const CodingManagerApplication = new Lang.Class({
         // way that ends up calling to hide() between the user pressed
         // the tray button and the sidebar has been made visible,
         // which can lead to the sidebar never been displayed.
-        this._window.connect('state-flags-changed', Lang.bind(this, function() {
-            if (this.Visible) {
-                if (!this._changedSignalId) {
-                    this._changedSignalId = Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
-                }
-            } else {
-                if (this._changedSignalId) {
-                    Wnck.Screen.get_default().disconnect(this._changedSignalId);
-                    this._changedSignalId = 0;
-                }
+        this._window.connect('map-event', Lang.bind(this, function() {
+            if (!this._changedSignalId) {
+                this._changedSignalId = Wnck.Screen.get_default().connect('active-window-changed', Lang.bind(this, this._on_active_window_changed));
+            }
+            return false;
+        }));
+        this._window.connect('unmap', Lang.bind(this, function() {
+            if (this._changedSignalId) {
+                Wnck.Screen.get_default().disconnect(this._changedSignalId);
+                this._changedSignalId = 0;
             }
         }));
 
